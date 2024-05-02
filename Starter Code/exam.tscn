@@ -1,18 +1,96 @@
-[gd_scene format=3 uid="uid://bunyohpobvu8b"]
+[gd_scene load_steps=7 format=3 uid="uid://bunyohpobvu8b"]
+
+[ext_resource type="Texture2D" uid="uid://rb8smo0f45mc" path="res://exam/icon.svg" id="1_1rgx0"]
+[ext_resource type="Script" path="res://exam/slider.gd" id="2_f2qtp"]
+[ext_resource type="Script" path="res://Area2D.gd" id="4_0p7sn"]
+[ext_resource type="AudioStream" uid="uid://daeeqhtb2f8cn" path="res://exam/Explosion31.wav" id="4_urppv"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_08qkd"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_s3qf1"]
+size = Vector2(1118, 131)
 
 [node name="root" type="Node2D"]
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
+[node name="Spawner" type="Node2D" parent="."]
+position = Vector2(485, 208)
+script = ExtResource("2_f2qtp")
 
-[node name="Label" type="Label" parent="CanvasLayer"]
-offset_left = 21.0
-offset_top = 28.0
-offset_right = 77.0
-offset_bottom = 51.0
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+unique_name_in_owner = true
+
+[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer"]
+offset_left = 55.0
+offset_top = 55.0
+offset_right = 400.0
+offset_bottom = 120.0
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer/PanelContainer"]
+layout_mode = 2
+color = Color(0.458824, 0.129412, 0.145098, 1)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/PanelContainer"]
+layout_mode = 2
+alignment = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 5
+size_flags_vertical = 4
+size_flags_stretch_ratio = 0.0
+alignment = 1
+
+[node name="Label" type="Label" parent="CanvasLayer/PanelContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
 text = "Count: "
 
-[node name="HSlider" type="HSlider" parent="CanvasLayer"]
-offset_left = 76.0
-offset_top = 28.0
-offset_right = 263.0
-offset_bottom = 55.0
+[node name="HSlider" type="HSlider" parent="CanvasLayer/PanelContainer/VBoxContainer/HBoxContainer"]
+modulate = Color(0.827451, 0.658824, 0.67451, 1)
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+max_value = 20.0
+
+[node name="Label2" type="Label" parent="CanvasLayer/PanelContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "#"
+
+[node name="Button" type="Button" parent="CanvasLayer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "Create Nodes"
+
+[node name="Icon" type="Sprite2D" parent="."]
+position = Vector2(493, 492)
+texture = ExtResource("1_1rgx0")
+
+[node name="Ground" type="StaticBody2D" parent="."]
+position = Vector2(-10, 42)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ground"]
+position = Vector2(481, 847)
+shape = SubResource("WorldBoundaryShape2D_08qkd")
+
+[node name="ColorRect" type="ColorRect" parent="Ground/CollisionShape2D"]
+offset_left = -498.0
+offset_right = 597.0
+offset_bottom = 173.0
+
+[node name="Area2D" type="Area2D" parent="."]
+position = Vector2(-10, 42)
+script = ExtResource("4_0p7sn")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(539, 901)
+shape = SubResource("RectangleShape2D_s3qf1")
+
+[node name="Marker2D" type="Marker2D" parent="."]
+position = Vector2(485, 208)
+
+[node name="Node2D" type="Node2D" parent="."]
+
+[node name="Explosion" type="AudioStreamPlayer" parent="Node2D"]
+unique_name_in_owner = true
+stream = ExtResource("4_urppv")
+
+[connection signal="value_changed" from="CanvasLayer/PanelContainer/VBoxContainer/HBoxContainer/HSlider" to="Spawner" method="_on_value_changed"]
+[connection signal="pressed" from="CanvasLayer/PanelContainer/VBoxContainer/Button" to="Spawner" method="_on_button_pressed"]
+[connection signal="body_entered" from="Area2D" to="Area2D" method="_on_body_entered"]
