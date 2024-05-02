@@ -13,7 +13,7 @@ config_version=5
 config/name="GP Test 2024 Starter Code"
 run/main_scene="res://exam.tscn"
 config/features=PackedStringArray("4.2", "Forward Plus")
-config/icon="res://icon.svg"
+config/icon="res://exam/icon.svg"
 
 [display]
 
